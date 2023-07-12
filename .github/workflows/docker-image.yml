@@ -34,10 +34,17 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         
     - name: Build Docker image
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        APP_VERSION: ${{ steps.GSV.ouputs.version }}
       run: |
         docker build --file Dockerfile --tag $DOCKER_USER/docker-graphql:$APP_VERSION .
         docker build --file Dockerfile --tag $DOCKER_USER/docker-graphql:latest .        
+        
     - name: Push Docker image
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        APP_VERSION: ${{ steps.GSV.ouputs.version }}
       run: |
         docker push $DOCKER_USER/docker-graphql:$APP_VERSION
         docker push $DOCKER_USER/docker-graphql:latest
