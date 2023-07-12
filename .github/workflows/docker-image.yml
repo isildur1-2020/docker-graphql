@@ -29,14 +29,13 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        APP_VERSION: ${{ steps.GSV.ouputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         
     - name: Build Docker image
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        APP_VERSION: ${{ steps.GSV.ouputs.version }}
+        APP_VERSION: ${{ steps.GSV.outputs.version }}
       run: |
         docker build --file Dockerfile --tag $DOCKER_USER/docker-graphql:$APP_VERSION .
         docker build --file Dockerfile --tag $DOCKER_USER/docker-graphql:latest .        
@@ -44,7 +43,7 @@ jobs:
     - name: Push Docker image
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        APP_VERSION: ${{ steps.GSV.ouputs.version }}
+        APP_VERSION: ${{ steps.GSV.outputs.version }}
       run: |
         docker push $DOCKER_USER/docker-graphql:$APP_VERSION
         docker push $DOCKER_USER/docker-graphql:latest
